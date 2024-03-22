@@ -15,12 +15,20 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 const App = () => {
-  const [patientName, setPatientName] = useState("");
-  const [age, setAge] = useState("");
-  const [isSmoking, setIsSmoking] = useState(false);
-  const [smokingYears, setSmokingYears] = useState("");
-  const [cigarettesPerDay, setCigarettesPerDay] = useState("");
-  const [copdRisk, setCopdRisk] = useState("");
+  // const [patientName, setPatientName] = useState("");
+  // const [age, setAge] = useState("");
+  // const [isSmoking, setIsSmoking] = useState(false);
+  // const [smokingYears, setSmokingYears] = useState("");
+  // const [cigarettesPerDay, setCigarettesPerDay] = useState("");
+  // const [copdRisk, setCopdRisk] = useState("");
+  const [formData, setFormData] = useState({
+    patientName: "",
+    age: "",
+    isSmoking: false,
+    smokingYears: "",
+    cigarettesPerDay: "",
+    copdRisk: "",
+  });
   const [records, setRecords] = useState([]);
   const [showRecords, setShowRecords] = useState(false);
 
@@ -47,6 +55,9 @@ const App = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
+    const { patientName, age, isSmoking, smokingYears, cigarettesPerDay } =
+      formData;
+
     if (
       !patientName ||
       !age ||
@@ -72,8 +83,8 @@ const App = () => {
       cigarettesPerDay: parseInt(cigarettesPerDay, 10),
       copdRisk: risk,
     });
-
-    setCopdRisk(risk);
+    setFormData({ ...formData, copdRisk: risk });
+    // setCopdRisk(risk);
   };
 
   const handleViewRecords = () => {
@@ -81,72 +92,102 @@ const App = () => {
   };
 
   const handleClearForm = () => {
-    setPatientName("");
-    setAge("");
-    setIsSmoking(false);
-    setSmokingYears("");
-    setCigarettesPerDay("");
-    setCopdRisk("");
+    // setPatientName("");
+    // setAge("");
+    // setIsSmoking(false);
+    // setSmokingYears("");
+    // setCigarettesPerDay("");
+    // setCopdRisk("");
+
+    setFormData({
+      patientName: "",
+      age: "",
+      isSmoking: false,
+      smokingYears: "",
+      cigarettesPerDay: "",
+      copdRisk: "",
+    });
   };
 
   return (
     <section>
-      <div className="max-w-md mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-xl">
-        <h2 className="text-2xl font-bold mb-4">Patient Information Form</h2>
+      <div className="max-w-md p-6 mx-auto mt-10 bg-gray-100 rounded-lg shadow-xl">
+        <h2 className="mb-4 text-2xl font-bold">Patient Information Form</h2>
         <form onSubmit={handleFormSubmit}>
           <div className="mb-4">
             <label className="block mb-2">Patient Name:</label>
             <input
-              className="block w-full border rounded-md px-4 py-2"
+              className="block w-full px-4 py-2 border rounded-md"
               type="text"
-              value={patientName}
-              onChange={(e) => setPatientName(e.target.value)}
+              // value={patientName}
+              // onChange={(e) => setPatientName(e.target.value)}
+              value={formData.patientName}
+              onChange={(e) =>
+                setFormData({ ...formData, patientName: e.target.value })
+              }
             />
           </div>
           <div className="mb-4">
             <label className="block mb-2">Age:</label>
             <input
-              className="block w-full border rounded-md px-4 py-2"
+              className="block w-full px-4 py-2 border rounded-md"
               type="number"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
+              // value={age}
+              // onChange={(e) => setAge(e.target.value)}
+              value={formData.age}
+              onChange={(e) =>
+                setFormData({ ...formData, age: e.target.value })
+              }
             />
           </div>
           <div className="mb-4">
             <label className="block mb-2">Is Smoking:</label>
             <input
               type="radio"
-              checked={isSmoking}
-              onChange={() => setIsSmoking(true)}
+              // checked={isSmoking}
+              // onChange={() => setIsSmoking(true)}
+              checked={formData.isSmoking}
+              onChange={() => setFormData({ ...formData, isSmoking: true })}
               className="mr-2"
             />
             Yes
             <input
               type="radio"
-              checked={!isSmoking}
-              onChange={() => setIsSmoking(false)}
+              // checked={!isSmoking}
+              // onChange={() => setIsSmoking(false)}
+              checked={!formData.isSmoking}
+              onChange={() => setFormData({ ...formData, isSmoking: false })}
               className="ml-4 mr-2"
             />
             No
           </div>
-          {isSmoking && (
+          {formData.isSmoking && (
             <>
               <div className="mb-4">
                 <label className="block mb-2">Smoking Years:</label>
                 <input
-                  className="block w-full border rounded-md px-4 py-2"
+                  className="block w-full px-4 py-2 border rounded-md"
                   type="number"
-                  value={smokingYears}
-                  onChange={(e) => setSmokingYears(e.target.value)}
+                  value={formData.smokingYears}
+                  // onChange={(e) => setSmokingYears(e.target.value)}
+                  onChange={(e) =>
+                    setFormData({ ...formData, smokingYears: e.target.value })
+                  }
                 />
               </div>
               <div className="mb-4">
                 <label className="block mb-2">Cigarettes Per Day:</label>
                 <input
-                  className="block w-full border rounded-md px-4 py-2"
+                  className="block w-full px-4 py-2 border rounded-md"
                   type="number"
-                  value={cigarettesPerDay}
-                  onChange={(e) => setCigarettesPerDay(e.target.value)}
+                  value={formData.cigarettesPerDay}
+                  // onChange={(e) => setCigarettesPerDay(e.target.value)}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      cigarettesPerDay: e.target.value,
+                    })
+                  }
                 />
               </div>
             </>
@@ -154,29 +195,35 @@ const App = () => {
           <div className="flex gap-4">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
             >
               Submit
             </button>
             <button
               type="button"
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              className="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-700"
               onClick={handleClearForm}
             >
               Clear
             </button>
           </div>
         </form>
-        {copdRisk && (
+        {/* {copdRisk && (
           <p className="mt-4">
             COPD Risk: {copdRisk} - Severity:{" "}
             {calculateCOPDSeverity(parseFloat(copdRisk))}
           </p>
+        )} */}
+        {formData.copdRisk && (
+          <p className="mt-4">
+            COPD Risk: {formData.copdRisk} - Severity:{" "}
+            {calculateCOPDSeverity(parseFloat(formData.copdRisk))}
+          </p>
         )}
       </div>
-      <div className="mt-4 flex justify-center">
+      <div className="flex justify-center mt-4">
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
           onClick={handleViewRecords}
         >
           View Earlier Records
@@ -184,7 +231,7 @@ const App = () => {
       </div>
       {/* {showRecords && (
         <div className="mt-4">
-          <h3 className="text-xl font-bold mb-2">Earlier Records:</h3>
+          <h3 className="mb-2 text-xl font-bold">Earlier Records:</h3>
           <ul>
             {records.map((record) => (
               <li key={record.id}>
@@ -198,27 +245,27 @@ const App = () => {
           <ul className="divide-y divide-gray-200">
             {showRecords && (
               <div className="mt-4">
-                <h3 className="text-xl font-bold mb-2 text-center">
+                <h3 className="mb-2 text-xl font-bold text-center">
                   Earlier Records:
                 </h3>
                 <div className="flex justify-center">
-                  <div className="max-w-lg w-full overflow-x-auto">
-                    <table className="table-auto w-full border-collapse border border-gray-800">
+                  <div className="w-full max-w-lg overflow-x-auto">
+                    <table className="w-full border border-collapse border-gray-800 table-auto">
                       <thead className="bg-gray-200">
                         <tr>
-                          <th className="border border-gray-800 px-4 py-2">
+                          <th className="px-4 py-2 border border-gray-800">
                             Name
                           </th>
-                          <th className="border border-gray-800 px-4 py-2">
+                          <th className="px-4 py-2 border border-gray-800">
                             Age
                           </th>
-                          <th className="border border-gray-800 px-4 py-2">
+                          <th className="px-4 py-2 border border-gray-800">
                             Smoking
                           </th>
-                          <th className="border border-gray-800 px-4 py-2">
+                          <th className="px-4 py-2 border border-gray-800">
                             COPD Risk
                           </th>
-                          <th className="border border-gray-800 px-4 py-2">
+                          <th className="px-4 py-2 border border-gray-800">
                             Severity
                           </th>
                         </tr>
@@ -226,19 +273,19 @@ const App = () => {
                       <tbody>
                         {records.map((record) => (
                           <tr key={record.id} className="text-center">
-                            <td className="border border-gray-800 px-4 py-2">
+                            <td className="px-4 py-2 border border-gray-800">
                               {record.patientName}
                             </td>
-                            <td className="border border-gray-800 px-4 py-2">
+                            <td className="px-4 py-2 border border-gray-800">
                               {record.age}
                             </td>
-                            <td className="border border-gray-800 px-4 py-2">
+                            <td className="px-4 py-2 border border-gray-800">
                               {record.isSmoking ? "Yes" : "No"}
                             </td>
-                            <td className="border border-gray-800 px-4 py-2">
+                            <td className="px-4 py-2 border border-gray-800">
                               {record.copdRisk}
                             </td>
-                            <td className="border border-gray-800 px-4 py-2">
+                            <td className="px-4 py-2 border border-gray-800">
                               {calculateCOPDSeverity(
                                 parseFloat(record.copdRisk)
                               )}
